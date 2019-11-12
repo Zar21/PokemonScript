@@ -9,6 +9,10 @@ let energy = document.getElementById("energy-bar");
 let enemyEnergy = document.getElementById("enemy-energy-bar");
 let quickMove;
 let cinematicMove;
+let typesTable;
+let typeEfective;
+let enemyInterval;
+let debilited = new CustomEvent('debilited');
 function readTextFile(file, callback) {
     var rawFile = new XMLHttpRequest();
     rawFile.overrideMimeType("application/json");
@@ -45,11 +49,12 @@ let types = new Promise((resolve, reject) => {
 });
 //usage:
 Promise.all([pokemon, moves, types]).then((results) => {
+    typesTable = results[2];
     myPokemon = results[0].find((el) => {
-        return el.dex == 472; //383
+        return el.dex == 382; //383
     });
     enemyPokemon = results[0].find((el) => {
-        return el.dex == 249; //487
+        return el.dex == 94; //487
     });
     getMoves(results[1], myPokemon);
     getMoves(results[1], enemyPokemon);
@@ -59,10 +64,11 @@ Promise.all([pokemon, moves, types]).then((results) => {
     backLife.max = (myPokemon.stats.baseStamina*2);
     document.getElementById("front-sprite").src = "https://projectpokemon.org/images/normal-sprite/"+ enemyPokemon.name.toLowerCase() +".gif";
     document.getElementById("back-sprite").src = "https://projectpokemon.org/images/normal-back/"+ myPokemon.name.toLowerCase() +".gif";
-    setInterval(() => {
+    enemyInterval = setInterval(() => {
         if (enemyEnergy.value >= (enemyPokemon.cinematicMove.energyDelta*-1) && !charging) {
             enemyCharging = true;
-            backLife.value -= Math.floor(0.5 * (enemyPokemon.stats.baseAttack / myPokemon.stats.baseDefense) * (0.7903 / 0.7903) * enemyPokemon.cinematicMove.power) + 1;
+            backLife.value -= Math.floor(0.5 * (enemyPokemon.stats.baseAttack / myPokemon.stats.baseDefense) * (0.7903 / 0.7903) * getStab(enemyPokemon.types, enemyPokemon.cinematicMove.pokemonType) * getEfectiveness(enemyPokemon.cinematicMove.pokemonType, myPokemon.types) * enemyPokemon.cinematicMove.power) + 1;
+            if (backLife.value == 0) campo.dispatchEvent(debilited);
             enemyEnergy.value += enemyPokemon.cinematicMove.energyDelta;
             setTimeout(() => {
                 enemyCharging = false;
@@ -71,9 +77,9 @@ Promise.all([pokemon, moves, types]).then((results) => {
         else {
             if (!enemyCharging) {
                 backAttack.classList.remove("hidden");
-                backLife.value -= Math.floor(0.5 * (enemyPokemon.stats.baseAttack / myPokemon.stats.baseDefense) * (0.7903 / 0.7903) * enemyPokemon.quickMove.power) + 1;
+                backLife.value -= Math.floor(0.5 * (enemyPokemon.stats.baseAttack / myPokemon.stats.baseDefense) * (0.7903 / 0.7903) * getStab(enemyPokemon.types, enemyPokemon.quickMove.pokemonType) * getEfectiveness(enemyPokemon.quickMove.pokemonType, myPokemon.types) * enemyPokemon.quickMove.power) + 1;
+                if (backLife.value == 0) campo.dispatchEvent(debilited);
                 enemyEnergy.value += enemyPokemon.quickMove.energyDelta;
-                console.log(enemyEnergy);
             }
         }
     }, enemyPokemon.quickMove.durationMs);
@@ -83,8 +89,10 @@ Promise.all([pokemon, moves, types]).then((results) => {
 campo.addEventListener("click", () => {
     if (!charging) {
         charging = true;
+        frontAttack.src = "../" + myPokemon.quickMove.pokemonType.name + "_atack.gif";
         frontAttack.classList.remove("hidden");
-        frontLife.value -= Math.floor(0.5 * (myPokemon.stats.baseAttack / enemyPokemon.stats.baseDefense) * (0.7903 / 0.7903) * myPokemon.quickMove.power) + 1;
+        frontLife.value -= Math.floor(0.5 * (myPokemon.stats.baseAttack / enemyPokemon.stats.baseDefense) * (0.7903 / 0.7903) * getStab(myPokemon.types, myPokemon.quickMove.pokemonType) * getEfectiveness(myPokemon.quickMove.pokemonType, enemyPokemon.types) * myPokemon.quickMove.power) + 1;
+        if (frontLife.value == 0) campo.dispatchEvent(debilited);
         energy.value += myPokemon.quickMove.energyDelta;
         setTimeout(() => {
             frontAttack.classList.add("hidden");
@@ -97,8 +105,8 @@ document.getElementById("special-atack").addEventListener("click", () => {
     if (energy.value >= (myPokemon.cinematicMove.energyDelta*-1) && !charging) {
         charging = true;
         frontAttack.classList.remove("hidden");
-        frontLife.value -= Math.floor(0.5 * (myPokemon.stats.baseAttack / enemyPokemon.stats.baseDefense) * (0.7903 / 0.7903) * myPokemon.cinematicMove.power) + 1;
-        //TODO Agregar el stab, Agregar la debilidad de tipos
+        frontLife.value -= Math.floor(0.5 * (myPokemon.stats.baseAttack / enemyPokemon.stats.baseDefense) * (0.7903 / 0.7903) * getStab(myPokemon.types, myPokemon.cinematicMove.pokemonType) * getEfectiveness(myPokemon.cinematicMove.pokemonType, enemyPokemon.types) * myPokemon.cinematicMove.power) + 1;
+        if (frontLife.value == 0) campo.dispatchEvent(debilited);
         energy.value += myPokemon.cinematicMove.energyDelta;
         setTimeout(() => {
             frontAttack.classList.add("hidden");
@@ -116,3 +124,29 @@ function getMoves(list, pokemon) {
     })
 }
 //Damage = Floor(0.5 * (Attack / Defense) * STAB * Type * Power) + 1
+
+function getEfectiveness(type, objetiveTypes) {
+    let multiplier = 1;
+    for (let i = 0; i < objetiveTypes.length; i++) {
+        multiplier *= typesTable.find((el) => {
+            return el.id == type.id;
+        }).damage.find((el) => {
+            return el.id == objetiveTypes[i].id;
+        }).attackScalar;
+    }
+    return multiplier;
+}
+
+function getStab(pokemonTypes, moveType) {
+    if (pokemonTypes.find((el) => {
+        return el.id == moveType.id
+    })) return 1.2
+    return 1;
+}
+
+campo.addEventListener("debilited", () => {
+    clearInterval(enemyInterval);
+    backAttack.classList.add("hidden");
+    frontAttack.classList.add("hidden");
+    (frontLife.value == 0) ? document.getElementById("front-sprite").src = "" : document.getElementById("back-sprite").src = "";
+});
