@@ -1,0 +1,267 @@
+#campo {
+    background-image: url("assets/img/fondo_campo.png");
+    background-repeat: no-repeat;
+    width: 75%;
+    margin: 0 auto;
+    background-size: 100%;
+    position: relative;
+    height: 600px;
+}
+
+#front_pokemon {
+    position: absolute;
+    right: 100px;
+    top: 100px;
+}
+
+#front_pokemon img, #back_pokemon img {
+    width: 200%;
+}
+
+#back_pokemon {
+    position: absolute;
+    left: 100px;
+    bottom: 0;
+}
+
+#front-pokemon-life {
+    position: absolute;
+    left: -800px;
+    width: 300px;
+    top: 100px;
+}
+
+#back-pokemon-life {
+    width: 300px;
+    position: absolute;
+    bottom: 100px;
+    right: -500px;
+}
+
+#front-atack {
+    position: absolute;
+    right: 0;
+    top: 100px;
+}
+
+#back-atack {
+    position: absolute;
+    bottom: 6px;
+    left: 0px;
+}
+
+.hidden {
+    display: none;
+}
+
+#front-sprite {
+    position: relative;
+    right: 200px;
+}
+
+#energy-bar {
+
+    position: fixed;
+    bottom: 0;
+    left: 0;
+
+}
+
+#special-atack {
+    position: fixed;
+    bottom: 0;
+    left: 200px;
+}
+
+.cartas h1 {display:block; color: #FFF; font-size: 40px; padding: 20px; text-shadow: 1px 1px 0px rgba(0,0,0,1);
+}
+
+.cartas * {
+        margin:0;
+        padding:0;
+        font-size:12px;
+        line-height:13px;
+        font-family: 'PT Sans Narrow', sans-serif;
+}
+    
+.cartas h4 {
+    background:#555;
+    color:#fff;
+    text-align:center;
+    margin-bottom:5px;
+}
+
+.cartas .mazo { 
+    text-align:center;
+}
+.cartas .carta {
+    width:400px;
+    border:1px solid rgba(0,0,0,.5);
+    border-radius:15px;
+    box-shadow:5px 5px 5px rgba(0,0,0,.2);
+    margin:10px;
+    background:#ccc;
+    overflow:hidden;
+    display:inline-block;
+    transition: all 0.5s;
+    text-align:left;
+}
+.cartas .carta:hover {
+    border:1px solid black;
+    box-shadow:8px 8px 5px rgba(0,0,0,.3);
+    margin-bottom:0px;
+}
+.cartas .carta:hover .info {
+    background:#ddd;
+}
+
+.cartas .imagen { 
+    height:400px;
+    background-size:cover;
+    position:relative;
+}
+
+.cartas .imagen img {
+    display:block;
+    width:100%;
+}
+
+.cartas .imagen .tipo { 
+    width: 10%;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.cartas .imagen .tipo.secundario {
+    width: 10%;
+    position: absolute;
+    top: 10px;
+    right: 60px;
+}
+.cartas .info { 
+    height:230px;
+    background:#ccc;
+    padding:5px;
+}
+
+.cartas .info img {
+    width:15px;
+    vertical-align:middle;
+    margin:2px;
+}
+
+.cartas .movimientos {
+    margin-top: 25px;
+}
+.cartas .movimientos b { 
+    text-shadow:1px 1px 0px rgba(0,0,0,0.9);
+    font-size: 14px;    
+}
+.cartas .movimientos p{
+    cursor: pointer;
+}
+.cartas .error {
+    background: #F00;
+    color: #FFF;
+}
+
+
+.cartas .carta.seleccionada {
+    opacity:0.5;
+}
+
+.carta.grass {
+    background: url('assets/img/arboles.jpg');
+}
+
+.carta.fire {
+    background: url('assets/img/fuego.jpg');
+}
+
+.carta.water {
+    background: url('assets/img/mar.jpg');
+}
+
+.carta.electric {
+    background: url('assets/img/rayos.jpg');
+}
+
+.carta.bug {
+    background: url('assets/img/hoja.jpg');
+}
+
+.carta.dark {
+    background: url('assets/img/oscuridad.jpg');
+}
+
+.carta.fighting {
+    background: url('assets/img/dojo.jpg');
+}
+
+.carta.flying {
+    background: url('assets/img/cielo.jpg');
+}
+
+.carta.ghost {
+    background: url('assets/img/terror.jpg');
+}
+
+.carta.ground {
+    background: url('assets/img/volcan.jpg');
+}
+
+.carta.ice {
+    background: url('assets/img/glaciar.jpg');
+}
+
+.carta.normal {
+    background: url('assets/img/blanco.jpg');
+}
+
+.carta.poison {
+    background: url('assets/img/contaminado.jpg');
+}
+
+.carta.psychic {
+    background: url('assets/img/morado.jpg');
+}
+
+.carta.rock {
+    background: url('assets/img/paret.jpg');
+}
+
+.carta.steel {
+    background: url('assets/img/acero.jpg');
+}
+
+.carta.dragon {
+    background: url('assets/img/cielodragon.jpg');
+}
+
+.carta.fairy {
+    background: url('assets/img/fantasia.jpg');
+}
+
+@media all and (max-width:880px) {
+    
+    .cartas .carta  {  width:250px;    }    
+    .cartas .imagen {  height:250px;   }
+    .cartas .info   {  height:130px;  transition: all 0.5s;  }
+    .cartas .carta:hover {
+        margin-bottom:8px;
+    }
+    .cartas .carta:hover .info {
+       height:230px; 
+       margin-top:-100px;
+    }
+    .cartas .imagen .tipo.secundario {
+    right: 40px;
+}
+}
+
+#battle {
+    position: fixed;
+    top: 0;
+    right: 0;
+}
