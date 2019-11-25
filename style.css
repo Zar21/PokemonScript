@@ -1,17 +1,29 @@
+body {
+    font-family: arial;
+}
+
+h1 {
+    text-align: center;
+}
+
+html, #battle_camp {
+    height: 100%;
+    margin: 0;
+}
 #campo {
     background-image: url("assets/img/fondo_campo.png");
     background-repeat: no-repeat;
-    width: 75%;
+    width: 100%;
     margin: 0 auto;
     background-size: 100%;
-    position: relative;
-    height: 600px;
+    height: 100%;
 }
 
 #front_pokemon {
     position: absolute;
     right: 100px;
-    top: 100px;
+    /*top: 300px;*/
+    margin-top: 25%;
 }
 
 #front_pokemon img, #back_pokemon img {
@@ -28,7 +40,7 @@
     position: absolute;
     left: -800px;
     width: 300px;
-    top: 100px;
+    top: 0;
 }
 
 #back-pokemon-life {
@@ -36,12 +48,26 @@
     position: absolute;
     bottom: 100px;
     right: -500px;
+    border: 1px solid #fff;
 }
+
+progress::-webkit-progress-bar {
+    background-color: #0f0;
+     border-radius: 2px;
+   }
+   progress::-webkit-progress-value {
+      border-radius: 2px; 
+   }
+   progress::-moz-progress-bar {
+     /* style rules */
+     background-color: #0f0;
+     border-radius: 2px;
+   }
 
 #front-atack {
     position: absolute;
-    right: 0;
-    top: 100px;
+    right: 150px;
+    top: 50px;
 }
 
 #back-atack {
@@ -63,14 +89,26 @@
 
     position: fixed;
     bottom: 0;
-    left: 0;
+    margin-left: 18%;
 
 }
 
 #special-atack {
     position: fixed;
+    background: linear-gradient(to right,
+    #00f,#008,
+    #000);
+    border: none;
+    color:
+    white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 10px;
     bottom: 0;
-    left: 200px;
+    margin-left: 26%;
 }
 
 .cartas h1 {display:block; color: #FFF; font-size: 40px; padding: 20px; text-shadow: 1px 1px 0px rgba(0,0,0,1);
@@ -263,5 +301,16 @@
 #battle {
     position: fixed;
     top: 0;
+    text-decoration: none;
     right: 0;
+    left: 0;
+    font-size: 20px;
+    background: linear-gradient(to right,
+    #00f,#008,
+    #000);
+    width: 100%;
+    text-align: center;
+    color:#aaf;
+    font-weight: bold;
+    animation: slide 1s ease 3.5s forwards;
 }
